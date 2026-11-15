@@ -1,16 +1,19 @@
-# Lab: SQL Injection UNION Attack — Querying Database Type and Version (MySQL & Microsoft)
+# Lab: SQL Injection UNION Attack: Querying Database Type and Version (MySQL & Microsoft)
 
 ## Objective
-Extract the exact database software and operating system version string by injecting a `UNION` query into a vulnerable product category filter.
+Extract the exact database software and operating system version string by injecting a UNION query into the vulnerable product category filter.
 
 ## Vulnerability Summary
-The `category` parameter in the `/filter` endpoint takes user input directly from the URL and places it into a backend SQL query without sanitization. By breaking out of the string with a single quote (`'`), an attacker can append custom SQL commands to read database system variables.
+The `category` parameter in the `/filter` endpoint takes user input directly from the URL and passes it into a backend SQL query without proper sanitization. Breaking out of the string literal with a single quote allows an attacker to append custom SQL commands and read internal database variables.
 
 ## Exploitation Steps
 
-1. **Find Column Count:** Used `ORDER BY` to confirm the original query returns **2 columns**.
-2. **Find Text Column:** Injected `' UNION SELECT 'a', NULL#` and confirmed **Column 1** displays text on the page.
-3. **Extract Database Version:** Replaced `'a'` with the built-in system variable `@@version` to pull the database version and OS details.
+1. First, I tested the column count using `ORDER BY` clauses and confirmed the original query returns 2 columns when the application loaded normally.
+2. Next, I checked which column could safely render text back to the user by injecting `' UNION SELECT 'a', NULL#` into the parameter, which verified that column 1 accepts string data.
+3. Finally, I replaced the test string with `@@version` to extract the live database environment details.
+
+### Extracted Artifact / Output
+* **Database Version String:** `8.0.42-0ubuntu0.20.04.1`
 
 ### Final Payload (Browser URL)
 
@@ -21,12 +24,15 @@ The `category` parameter in the `/filter` endpoint takes user input directly fro
     ' UNION SELECT @@version, NULL#
 
 ## Payload Breakdown
-* **`'`**: Closes out the original text parameter in the SQL query.
-* **`UNION SELECT`**: Merges our custom query results with the original page output.
-* **`@@version`**: Built-in system variable in MySQL and Microsoft SQL Server that returns the exact version string.
-* **`NULL`**: Placeholder for the second column so both queries match in column count.
-* **`%23` (`#`)**: URL-encoded comment character that tells the database to ignore the rest of the original query.
+* The single quote `'` closes out the original text parameter in the backend query.
+* `UNION SELECT` appends our custom query results to the application's original output.
+* `@@version` is a built-in system variable in MySQL and Microsoft SQL Server that pulls the exact release and OS build.
+* `NULL` acts as a placeholder for the second column so both queries have matching column counts.
+* `%23` (`#`) is the URL-encoded comment character that tells the database to ignore the rest of the original developer query.
+
+## Business Impact
+Knowing the exact database version and OS build allows an attacker to research specific unpatched CVEs for that exact software release, potentially leading to remote code execution or total server compromise.
 
 ## How to Fix (Remediation)
-* **Use Parameterized Queries (Prepared Statements):** Ensure user input is treated strictly as plain data, never as executable SQL code.
-* **Allowlist Input Validation:** Restrict the `category` parameter so it only accepts known, valid category names.
+* Implement parameterized queries (prepared statements) so user input is handled strictly as data rather than executable code.
+* Apply strict allowlist validation on the `category` parameter to ensure only expected input values are processed.
