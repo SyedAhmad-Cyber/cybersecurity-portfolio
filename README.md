@@ -5,14 +5,14 @@ Independent cybersecurity specialist focused on offensive web assessment, vulner
 
 ---
 
-### 🚀 Core Focus & Execution Roadmap
+###  Core Focus & Execution Roadmap
 - **Web Application Security:** Mastering OWASP Top 10 threat vectors (SQLi, XSS, Auth bypass) and rigorous remediation workflows.
 - **Hands-On Engineering:** Building reproducible lab write-ups, infrastructure hardening guides, and defensive controls.
 - **Engineering Stack Expansion:** Systematic, long-term mastery of Python, C programming, and Linux systems architecture.
 
 ---
 
-### 📁 Portfolio Architecture
+### Portfolio Architecture
 - [Sample Vulnerability Assessments](./01-vulnerability-assessments/)
 - [PortSwigger Lab Write-ups & PoCs](./02-lab-writeups-and-pocs/)
 - [Server & WAF Hardening Labs](./03-defensive-hardening/)
@@ -20,7 +20,7 @@ Independent cybersecurity specialist focused on offensive web assessment, vulner
 
 ---
 
-### ⚙️ Technical Arsenal & Competencies
+### Technical Arsenal & Competencies
 - **Offensive Security:** Burp Suite, Nmap, SQLmap, Kali Linux, Network Reconnaissance.
 - **Defensive & Systems:** Linux Administration, pfSense, ModSecurity CRS, Cloudflare WAF, MySQL.
 - **Languages & Core:** Python, C, Bash/Zsh Scripting, SQL, HTTP/Web Fundamentals.
